@@ -4,7 +4,6 @@ import "./index.css";
 
 /*
   TODO: Implement improvements listed here: https://reactjs.org/tutorial/tutorial.html#wrapping-up
-  1. Display the location for each move in the format (col, row) in the move history list.
   2. Bold the currently selected item in the move list.
   3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
   4. Add a toggle button that lets you sort the moves in either ascending or descending order.
@@ -95,8 +94,9 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
     
     const moves = history.map((step, move) => {
+      const loc = findMoveLocation(move, history);
       const desc = move ?
-        'Go to move #' + move :
+        `Go to move #${move} (${loc[0]}, ${loc[1]})` :
         'Go to game start';
       return (
         <li key={move}>
@@ -127,6 +127,21 @@ class Game extends React.Component {
       </div>
     );
   }
+}
+
+function findMoveLocation (move, history) {
+  if (move === 0) return null;
+
+  const newSquares = history[move].squares.slice();
+  const oldSquares = history[move - 1].squares.slice();
+
+  const diffIndex = newSquares.findIndex(function (element, index) {
+    return element !== oldSquares[index];
+  });
+
+  const [col, row] = [diffIndex % 3 + 1, Math.floor(diffIndex / 3) + 1];
+
+  return [col, row];
 }
 
 function calculateWinner(squares) {
