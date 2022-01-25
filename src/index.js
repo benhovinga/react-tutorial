@@ -4,7 +4,6 @@ import "./index.css";
 
 /*
   TODO: Implement improvements listed here: https://reactjs.org/tutorial/tutorial.html#wrapping-up
-  2. Bold the currently selected item in the move list.
   3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
   4. Add a toggle button that lets you sort the moves in either ascending or descending order.
   5. When someone wins, highlight the three squares that caused the win.
@@ -95,9 +94,13 @@ class Game extends React.Component {
     
     const moves = history.map((step, move) => {
       const loc = findMoveLocation(move, history);
-      const desc = move ?
+      let desc = move ?
         `Go to move #${move} (${loc[0]}, ${loc[1]})` :
         'Go to game start';
+      // Make last item bold
+      if(move === history.length -1) {
+        desc = <strong>{desc}</strong>
+      }
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
