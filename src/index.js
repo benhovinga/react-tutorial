@@ -4,7 +4,6 @@ import "./index.css";
 
 /*
   TODO: Implement improvements listed here: https://reactjs.org/tutorial/tutorial.html#wrapping-up
-  3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
   4. Add a toggle button that lets you sort the moves in either ascending or descending order.
   5. When someone wins, highlight the three squares that caused the win.
   6. When no one wins, display a message about the result being a draw.
@@ -21,7 +20,7 @@ function Square(props) {
 class Board extends React.Component {
   renderSquare(i) {
     return (
-      <Square
+      <Square key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -29,25 +28,15 @@ class Board extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    const rows = [];
+    for (let x = 0; x < 3; x++){
+      const squares = [];
+      for (let y = 0; y < 3; y++){
+        squares.push(this.renderSquare((x * 3) + y));
+      }
+      rows.push(<div className="board-row" key={x}>{squares}</div>);
+    }
+    return <div>{rows}</div>
   }
 }
 
